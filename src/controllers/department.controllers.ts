@@ -5,15 +5,15 @@ export const getEmployeesByDepartment = asyncHandler(
   async (req, res): Promise<any> => {
     try {
       const { department } = req.query;
-      if (!department)
-        return res.status(400).json({ message: "department name is required" });
-      const departmentExists = await Department.find({ name: department });
-      if (!departmentExists)
-        return res
-          .status(404)
-          .json({ message: "department name does not exists" });
+      if (department) {
+        const departmentExists = await Department.find({ name: department });
+        if (!departmentExists)
+          return res
+            .status(404)
+            .json({ message: "department name does not exists" });
+      }
       const departmentEmployees = await Department.getEmployeesByDepartment(
-        "Physics"
+        department as string
       );
       return res.status(200).json({ results: departmentEmployees });
     } catch (err: any) {

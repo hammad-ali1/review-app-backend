@@ -7,7 +7,7 @@ export interface DepartmentInterface extends GlobalTypes.Department {
 }
 interface DepartmentModelInterface extends Model<DepartmentInterface> {
   // declare any static methods here
-  getEmployeesByDepartment(department: string): Promise<any>;
+  getEmployeesByDepartment(department?: string): Promise<any>;
 }
 
 const DepartmentSchema = new Schema<GlobalTypes.Department>({
@@ -20,7 +20,7 @@ DepartmentSchema.statics.getEmployeesByDepartment = async function (
   department: string
 ) {
   return await this.aggregate([
-    { $match: { name: department } },
+    { $match: department ? { name: department } : {} },
     { $group: { _id: "$name" } },
     {
       $lookup: {

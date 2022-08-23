@@ -1,16 +1,5 @@
 import asyncHandler from "express-async-handler";
 import Employee from "../models/Employee.model";
-import mongoose from "mongoose";
-
-// Employee.find({ department: "630492c160e88e9012a67f42" }).then((employees) => {
-//   employees.forEach((employee) => {
-//     //@ts-ignore
-//     employee.department = new mongoose.Types.ObjectId(
-//       "630492c160e88e9012a67f42"
-//     );
-//     employee.save();
-//   });
-// });
 
 export const getEmployees = asyncHandler(async (req, res) => {
   try {
