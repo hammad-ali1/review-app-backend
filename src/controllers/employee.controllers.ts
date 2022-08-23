@@ -1,11 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Employee from "../models/Employee.model";
 
-import Department from "../models/Department.model";
-
-Department.getEmployeesByDepartment("Physics").then(console.log);
-// Employee.getEmployeesByDepartment("Physics").then(console.log);
-
 export const getEmployees = asyncHandler(async (req, res) => {
   try {
     const { name } = req.query;
