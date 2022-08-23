@@ -22,7 +22,18 @@ const DepartmentSchema = new Schema<GlobalTypes.Department>(
 DepartmentSchema.statics.getEmployeesByDepartment = async function (
   department: string
 ) {
-  return await this.aggregate([{ $match: {} }, { $group: { _id: "$_id" } }]);
+  return await this.aggregate([
+    { $match: { _id: department } },
+    { $group: { _id: "$_id" } },
+    {
+      $lookup: {
+        from: "employees",
+        localField: "_id",
+        foreignField: "department",
+        as: "employees",
+      },
+    },
+  ]);
 };
 const Department = mongoose.model<
   DepartmentInterface,
