@@ -16,7 +16,7 @@ const EmployeeSchema = new Schema<GlobalTypes.Employee>({
   name: { type: String },
   subject: { type: String },
   designation: { type: String },
-  department: { type: String, ref: "Employee" },
+  department: { type: String, ref: "Department" },
   qualifications: [
     {
       degree: { type: String },

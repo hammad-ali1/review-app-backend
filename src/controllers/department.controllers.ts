@@ -7,7 +7,7 @@ export const getEmployeesByDepartment = asyncHandler(
       const { department } = req.query;
       if (!department)
         return res.status(400).json({ message: "department name is required" });
-      const departmentExists = await Department.find({ _id: department });
+      const departmentExists = await Department.find({ name: department });
       if (!departmentExists)
         return res
           .status(404)
@@ -16,7 +16,8 @@ export const getEmployeesByDepartment = asyncHandler(
         "Physics"
       );
       return res.status(200).json({ results: departmentEmployees });
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err.message);
       res
         .status(400)
         .json({ err: "Error occured in getting employees by department" });

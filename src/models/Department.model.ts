@@ -10,27 +10,31 @@ interface DepartmentModelInterface extends Model<DepartmentInterface> {
   getEmployeesByDepartment(department: string): Promise<any>;
 }
 
-const DepartmentSchema = new Schema<GlobalTypes.Department>(
-  {
-    _id: { type: String, unique: true },
-    employeeCount: { type: Number },
-    employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "Employee" }],
-  },
-  { _id: false }
-);
+const DepartmentSchema = new Schema<GlobalTypes.Department>({
+  name: { type: String, unique: true },
+  employeeCount: { type: Number },
+  employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "Employee" }],
+});
 
 DepartmentSchema.statics.getEmployeesByDepartment = async function (
   department: string
 ) {
   return await this.aggregate([
-    { $match: { _id: department } },
-    { $group: { _id: "$_id" } },
+    { $match: { name: department } },
+    { $group: { _id: "$name" } },
     {
       $lookup: {
         from: "employees",
         localField: "_id",
         foreignField: "department",
         as: "employees",
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        name: "$_id",
+        employees: "$employees",
       },
     },
   ]);
