@@ -28,5 +28,11 @@ declare global {
       employeeCount: number;
       employees: string[];
     };
+    type User = {
+      email: string;
+      password: string;
+      name: string;
+      isEmailVerified: boolean;
+    };
   }
 }

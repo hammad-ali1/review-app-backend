@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getEmployees } from "../controllers/employee.controllers";
+import {
+  getEmployees,
+  getEmployeeById,
+} from "../controllers/employee.controllers";
 
 const employeeRouter = Router();
 
 employeeRouter.route("/").get(getEmployees);
+employeeRouter.route("/:id").get(getEmployeeById);
 
 export default employeeRouter;
