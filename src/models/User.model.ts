@@ -17,7 +17,10 @@ const UserScehma = new Schema<GlobalTypes.User>({
     lowercase: true,
     validate: {
       validator: (email: string) =>
-        new RegExp("^[A-Za-z0-9-]+@cuilahore.edu.pk$").test(email),
+        new RegExp(
+          "^[a-z0-9]{4}-[a-z]{3}-[0-9]{3}(@cuilahore.edu.pk)$",
+          "i"
+        ).test(email),
       message: "email does not match the cuilahore domain",
     },
     immutable: true,
