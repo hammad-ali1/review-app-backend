@@ -1,6 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
 import mongoose from "mongoose";
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 //Routers
 import employeeRouter from "./router/employee.routes";
@@ -8,7 +9,6 @@ import departmentRouter from "./router/department.routes";
 import userRouter from "./router/user.routes";
 //Middlewares
 import { attachUserToResponse } from "./middlewares/auth.middleware";
-dotenv.config();
 const app = express();
 //add middlewares
 app.use(cors());
