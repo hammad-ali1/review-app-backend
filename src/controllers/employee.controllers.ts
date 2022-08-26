@@ -38,3 +38,21 @@ export const getEmployeeById = asyncHandler(async (req, res): Promise<any> => {
     res.status(400).json({ message: "error occured in database" });
   }
 });
+
+export const addRating = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { employeeId, ratingValue } = req.body;
+    if (!employeeId || !ratingValue)
+      return res
+        .status(400)
+        .json({ message: "provide employeeId and ratingValue" });
+    const result = await Employee.addRating(employeeId, {
+      value: ratingValue,
+      user: res.locals.user._id,
+    });
+    res.status(200).json({ employee: result });
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({ message: "error occured while adding new rating" });
+  }
+});

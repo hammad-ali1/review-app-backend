@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 const TokenSchema = new Schema(
   {
     token: { type: String, required: true, unique: true },
-    user: { type: String, required: true, unique: true, ref: "User" },
+    user: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      unique: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,

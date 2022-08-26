@@ -22,7 +22,6 @@ export const attachUserToResponse = asyncHandler(async (req, res, next) => {
       } else {
         res.locals.user = false;
       }
-      next();
     } catch (err: any) {
       console.log(err.message);
     }
@@ -30,4 +29,17 @@ export const attachUserToResponse = asyncHandler(async (req, res, next) => {
   next();
 });
 
-export default { attachUserToResponse };
+export const protectRoute = asyncHandler(async (req, res, next) => {
+  if (res.locals.user) {
+    const user = await User.findById(res.locals.user._id);
+    if (user?.isEmailVerified) {
+      return next();
+    }
+    res.status(400).json({ message: "account verification pending" });
+  } else {
+    res
+      .status(400)
+      .json({ message: "must be signed in to perform this action" });
+  }
+});
+export default { attachUserToResponse, protectRoute };

@@ -1,3 +1,4 @@
+import type { ObjectId } from "mongoose";
 export {};
 declare global {
   declare namespace GlobalTypes {
@@ -11,6 +12,7 @@ declare global {
       department: string;
       qualifications: Qualification[];
       experience: Experience[];
+      ratings: Rating[];
     };
 
     type Qualification = {
@@ -33,6 +35,10 @@ declare global {
       password: string;
       name: string;
       isEmailVerified: boolean;
+    };
+    type Rating = {
+      value: number;
+      user: ObjectId;
     };
   }
 }

@@ -1,11 +1,19 @@
 import mongoose, { Model } from "mongoose";
 const Schema = mongoose.Schema;
 
+const RatingSchema = new Schema<GlobalTypes.Rating>(
+  {
+    value: { type: Number, required: true, min: 1, max: 5 },
+    user: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  },
+  { timestamps: true }
+);
 //Types
 export interface EmployeeInterface extends GlobalTypes.Employee {
   // declare any instance methods here
 }
 interface EmployeeModelInterface extends Model<EmployeeInterface> {
+  addRating: (_id: string, rating: GlobalTypes.Rating) => Promise<any>;
   // declare any static methods here
 }
 
@@ -31,7 +39,28 @@ const EmployeeSchema = new Schema<GlobalTypes.Employee>({
       date: { type: String },
     },
   ],
+  ratings: { type: [RatingSchema], default: [] },
 });
+
+EmployeeSchema.statics.addRating = async function (
+  _id: string,
+  rating: GlobalTypes.Rating
+) {
+  const isRatingAlreadyGiven = await Employee.findOne({
+    _id: _id,
+    ratings: { $elemMatch: { user: rating.user } },
+  });
+  if (isRatingAlreadyGiven) {
+    return "Rating already given by this user";
+  }
+  const result = await Employee.findOneAndUpdate(
+    { _id },
+    { $addToSet: { ratings: rating } }
+  );
+
+  if (!result) return "Could not update emoloyee ratings";
+  return result;
+};
 
 const Employee = mongoose.model<EmployeeInterface, EmployeeModelInterface>(
   "Employee",
