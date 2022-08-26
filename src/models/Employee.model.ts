@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const RatingSchema = new Schema<GlobalTypes.Rating>(
   {
-    value: { type: Number, required: true, min: 1, max: 5 },
+    value: { type: Number, required: true, min: 0.5, max: 5 },
     user: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
   },
   { timestamps: true }
@@ -14,6 +14,7 @@ export interface EmployeeInterface extends GlobalTypes.Employee {
 }
 interface EmployeeModelInterface extends Model<EmployeeInterface> {
   addRating: (_id: string, rating: GlobalTypes.Rating) => Promise<any>;
+  getEmployeeWithAverageRating: (_id: string) => Promise<any>;
   // declare any static methods here
 }
 
@@ -59,7 +60,32 @@ EmployeeSchema.statics.addRating = async function (
   );
 
   if (!result) return "Could not update emoloyee ratings";
-  return result;
+  return "Rating recorded successfully";
+};
+
+EmployeeSchema.statics.getEmployeeWithAverageRating = async function (
+  objectId: string
+) {
+  const results = await Employee.aggregate([
+    {
+      $match: { _id: new mongoose.Types.ObjectId(objectId) },
+    },
+    {
+      $addFields: {
+        averageRating: { $avg: "$ratings.value" },
+      },
+    },
+    // {
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "ratings.user",
+    //     foreignField: "_id",
+    //     as: "users",
+    //   },
+    // },
+    // { $unwind: "$users" },
+  ]);
+  return results[0];
 };
 
 const Employee = mongoose.model<EmployeeInterface, EmployeeModelInterface>(

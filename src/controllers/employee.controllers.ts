@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import Employee from "../models/Employee.model";
-
+Employee.getEmployeeWithAverageRating("630462d9ab582d0769d0b3c8").then(
+  console.log
+);
 export const getEmployees = asyncHandler(async (req, res): Promise<any> => {
   try {
     const { name } = req.query;
@@ -27,7 +29,7 @@ export const getEmployeeById = asyncHandler(async (req, res): Promise<any> => {
       return res
         .status(400)
         .json({ message: "employee id is required in params" });
-    const employee = await Employee.findById(id);
+    const employee = await Employee.getEmployeeWithAverageRating(id);
     if (employee) {
       return res.status(200).json(employee);
     } else {
@@ -50,7 +52,7 @@ export const addRating = asyncHandler(async (req, res): Promise<any> => {
       value: ratingValue,
       user: res.locals.user._id,
     });
-    res.status(200).json({ employee: result });
+    res.status(200).json({ message: result });
   } catch (err: any) {
     console.log(err.message);
     res.status(400).json({ message: "error occured while adding new rating" });
