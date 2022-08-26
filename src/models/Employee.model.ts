@@ -1,4 +1,5 @@
 import mongoose, { Model } from "mongoose";
+import User from "./User.model";
 const Schema = mongoose.Schema;
 
 const RatingSchema = new Schema<GlobalTypes.Rating>(
@@ -66,7 +67,7 @@ EmployeeSchema.statics.addRating = async function (
 EmployeeSchema.statics.getEmployeeWithAverageRating = async function (
   objectId: string
 ) {
-  const results = await Employee.aggregate([
+  const aggregationResults = await Employee.aggregate([
     {
       $match: { _id: new mongoose.Types.ObjectId(objectId) },
     },
@@ -75,17 +76,13 @@ EmployeeSchema.statics.getEmployeeWithAverageRating = async function (
         averageRating: { $avg: "$ratings.value" },
       },
     },
-    // {
-    //   $lookup: {
-    //     from: "users",
-    //     localField: "ratings.user",
-    //     foreignField: "_id",
-    //     as: "users",
-    //   },
-    // },
-    // { $unwind: "$users" },
   ]);
-  return results[0];
+  const poulatedUsers = await User.populate(aggregationResults, {
+    path: "ratings.user",
+    select: "name",
+  });
+
+  return poulatedUsers[0];
 };
 
 const Employee = mongoose.model<EmployeeInterface, EmployeeModelInterface>(

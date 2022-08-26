@@ -1,8 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Employee from "../models/Employee.model";
-Employee.getEmployeeWithAverageRating("630462d9ab582d0769d0b3c8").then(
-  console.log
-);
+
 export const getEmployees = asyncHandler(async (req, res): Promise<any> => {
   try {
     const { name } = req.query;
