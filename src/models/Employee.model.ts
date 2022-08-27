@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const RatingSchema = new Schema<GlobalTypes.Rating>(
   {
     value: { type: Number, required: true, min: 0.5, max: 5 },
+    comments: { type: String, default: "" },
     user: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
   },
   { timestamps: true }

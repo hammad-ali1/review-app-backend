@@ -38,6 +38,7 @@ export const validateUser = asyncHandler(async (req, res): Promise<any> => {
 
     if (userFound && (await bcrypt.compare(password, userFound.password))) {
       const userWithoutPassword = {
+        _id: userFound._id,
         name: userFound.name,
         email: userFound.email,
         isEmailVerified: userFound.isEmailVerified,

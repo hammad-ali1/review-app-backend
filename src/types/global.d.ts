@@ -39,6 +39,7 @@ declare global {
     type Rating = {
       value: number;
       user: ObjectId;
+      comments: string;
     };
   }
 }

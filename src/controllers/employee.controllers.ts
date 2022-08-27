@@ -41,7 +41,7 @@ export const getEmployeeById = asyncHandler(async (req, res): Promise<any> => {
 
 export const addRating = asyncHandler(async (req, res): Promise<any> => {
   try {
-    const { employeeId, ratingValue } = req.body;
+    const { employeeId, ratingValue, comments } = req.body;
     if (!employeeId || !ratingValue)
       return res
         .status(400)
@@ -49,6 +49,7 @@ export const addRating = asyncHandler(async (req, res): Promise<any> => {
     const result = await Employee.addRating(employeeId, {
       value: ratingValue,
       user: res.locals.user._id,
+      comments: comments,
     });
     res.status(200).json({ message: result });
   } catch (err: any) {
