@@ -28,6 +28,9 @@ connection.once("open", () => {
 app.use("/api/employees", employeeRouter);
 app.use("/api/departments", departmentRouter);
 app.use("/api/users", userRouter);
+app.get("/", (req, res) => {
+  res.send("Hammad's server");
+});
 //listen on port
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`server listening on port ${port}`));
