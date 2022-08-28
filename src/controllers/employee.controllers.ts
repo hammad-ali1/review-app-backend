@@ -9,7 +9,7 @@ export const getEmployees = asyncHandler(async (req, res): Promise<any> => {
         .status(400)
         .json({ message: "Name is a required query parameter" });
     const employees = await Employee.find({
-      name: { $regex: new RegExp(name as string, "i") },
+      name: { $regex: new RegExp(`\^[a-z ]\*(${name})`, "i") },
     });
     res.status(200).json({ results: employees });
   } catch (err: any) {
