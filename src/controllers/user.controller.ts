@@ -109,6 +109,24 @@ export const verifyLink = asyncHandler(async (req, res): Promise<any> => {
   }
   res.status(400).send("<h1>Invalid link </h1>");
 });
+
+export const getRatingsGiven = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { userid } = req.query;
+    if (!userid)
+      return res
+        .status(400)
+        .json({ message: "userid is a required query param" });
+    const results = await User.getRatings(userid as string);
+    res.status(200).json(results);
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({
+      message: "an error occured while getting ratings given by user",
+    });
+  }
+});
+
 //generate JWT
 const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: "20d" });

@@ -1,4 +1,5 @@
 import mongoose, { Model } from "mongoose";
+import Employee from "./Employee.model";
 const Schema = mongoose.Schema;
 
 //Types
@@ -7,6 +8,7 @@ export interface UserInterface extends GlobalTypes.User {
 }
 interface UserModelInterface extends Model<UserInterface> {
   //static method declarations
+  getRatings: (_id: string) => Promise<any>;
 }
 
 const UserScehma = new Schema<GlobalTypes.User>(
@@ -34,6 +36,21 @@ const UserScehma = new Schema<GlobalTypes.User>(
     timestamps: true,
   }
 );
+
+UserScehma.statics.getRatings = async (_id: string) => {
+  const results = await Employee.aggregate([
+    { $unwind: "$ratings" },
+    { $match: { "ratings.user": new mongoose.Types.ObjectId(_id) } },
+    {
+      $group: {
+        _id: "$_id",
+        employeeName: { $first: "$name" },
+        ratings: { $addToSet: "$ratings" },
+      },
+    },
+  ]);
+  return results;
+};
 
 const User = mongoose.model<UserInterface, UserModelInterface>(
   "User",
