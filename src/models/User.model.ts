@@ -41,13 +41,9 @@ UserScehma.statics.getRatings = async (_id: string) => {
   const results = await Employee.aggregate([
     { $unwind: "$ratings" },
     { $match: { "ratings.user": new mongoose.Types.ObjectId(_id) } },
-    {
-      $group: {
-        _id: "$_id",
-        employeeName: { $first: "$name" },
-        ratings: { $addToSet: "$ratings" },
-      },
-    },
+    { $sort: { "ratings.updatedAt": -1 } },
+    { $set: { rating: "$ratings" } },
+    { $project: { ratings: 0 } },
   ]);
   return results;
 };
