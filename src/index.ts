@@ -7,13 +7,14 @@ import cors from "cors";
 import employeeRouter from "./router/employee.routes";
 import departmentRouter from "./router/department.routes";
 import userRouter from "./router/user.routes";
+import accountancyUserRouter from "./router/accountancyUser.routes";
 //Middlewares
 import { attachUserToResponse } from "./middlewares/auth.middleware";
 const app = express();
 //add middlewares
 app.use(cors());
 app.use(express.json());
-app.use(attachUserToResponse);
+// app.use(attachUserToResponse);
 
 //connection uri
 const uri = process.env.ATLAS_URI;
@@ -28,6 +29,7 @@ connection.once("open", () => {
 app.use("/api/employees", employeeRouter);
 app.use("/api/departments", departmentRouter);
 app.use("/api/users", userRouter);
+app.use("/api/accountancy/users", accountancyUserRouter);
 app.get("/", (req, res) => {
   res.send("Hammad's server");
 });

@@ -41,5 +41,17 @@ declare global {
       user: ObjectId;
       comments: string;
     };
+
+    type AccountancyUser = {
+      userName: string;
+      email: string;
+      password: string;
+      firstName: string;
+      lastName: string;
+      authCode: string;
+      DOB: Date;
+      title: string;
+      businessName: string;
+    };
   }
 }
