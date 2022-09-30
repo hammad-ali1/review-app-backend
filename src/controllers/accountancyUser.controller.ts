@@ -27,9 +27,9 @@ export const addUser = asyncHandler(async (req, res): Promise<any> => {
 export const logInUser = asyncHandler(async (req, res): Promise<any> => {
   try {
     const { username, password } = req.body;
-    const userFound = await AccountancyUser.findOne({ username });
+    const userFound = await AccountancyUser.findOne({ userName: username });
 
-    if (userFound && password == userFound.password) {
+    if (userFound && password === userFound.password) {
       //send otp code
       var authCode = Math.floor(1000 + Math.random() * 9000);
       const html = `<p> your auth code is ${authCode}</p>`;
