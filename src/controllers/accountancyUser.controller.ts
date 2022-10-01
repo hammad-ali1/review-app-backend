@@ -33,7 +33,8 @@ export const logInUser = asyncHandler(async (req, res): Promise<any> => {
       //send otp code
       var authCode = Math.floor(1000 + Math.random() * 9000);
       const html = `<p> your auth code is ${authCode}</p>`;
-      sendMessage(userFound.email, "Two factor auth", html);
+      if (userFound.email)
+        sendMessage(userFound.email, "Two factor auth", html);
       userFound.authCode = authCode.toString();
       return res.status(200).json({
         user: userFound,

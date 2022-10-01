@@ -7,7 +7,7 @@ export const addTransaction = asyncHandler(async (req, res): Promise<any> => {
     const result = await Transaction.create({
       ...transaction,
     });
-    return res.status(200).json({ transaction: result });
+    return res.status(200).json(result);
   } catch (err: any) {
     console.log(err.message);
     res
@@ -15,3 +15,31 @@ export const addTransaction = asyncHandler(async (req, res): Promise<any> => {
       .json({ message: "error occured while creating transaction" });
   }
 });
+
+export const getTransactions = asyncHandler(async (req, res): Promise<any> => {
+  const { user } = req.params;
+  try {
+    const result = await Transaction.find({ user: user });
+    return res.status(200).json(result);
+  } catch (err: any) {
+    console.log(err.message);
+    res
+      .status(400)
+      .json({ message: "error occured while fetching transaction" });
+  }
+});
+
+export const deleteTransaction = asyncHandler(
+  async (req, res): Promise<any> => {
+    const { _id } = req.params;
+    try {
+      const result = await Transaction.findByIdAndDelete(_id);
+      return res.status(200).json(result);
+    } catch (err: any) {
+      console.log(err.message);
+      res
+        .status(400)
+        .json({ message: "error occured while deleting transaction" });
+    }
+  }
+);
