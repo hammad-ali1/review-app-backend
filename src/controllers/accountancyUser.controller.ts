@@ -47,6 +47,39 @@ export const logInUser = asyncHandler(async (req, res): Promise<any> => {
   }
 });
 
+export const getAllUsers = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { _id } = req.body;
+    const userFound = await AccountancyUser.findById(_id);
+
+    if (userFound && userFound.isAdmin) {
+      const allUsers = await AccountancyUser.find({});
+      return res.status(200).json(allUsers);
+    } else {
+      return res.status(404).json({ message: "not an admin account" });
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({ message: "error occured while getting users" });
+  }
+});
+
+export const deleteUser = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { userName } = req.body;
+    const userFound = await AccountancyUser.deleteOne({ userName });
+
+    if (userFound) {
+      return res.status(200).json({ message: "success" });
+    } else {
+      return res.status(404).json({ message: "not found" });
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({ message: "error occured " });
+  }
+});
+
 // export const getUser = asyncHandler(async (req, res): Promise<any> => {
 //   try {
 //     const { token } = req.query;

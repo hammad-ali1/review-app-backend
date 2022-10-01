@@ -52,6 +52,7 @@ declare global {
       DOB: Date;
       title: string;
       businessName: string;
+      isAdmin: boolean;
     };
   }
 }

@@ -27,6 +27,7 @@ const UserScehma = new Schema<GlobalTypes.AccountancyUser>(
     businessName: { type: String, required: true },
     title: { type: String, required: true },
     DOB: { type: Date, required: true },
+    isAdmin: { type: Boolean, default: false },
   },
   {
     timestamps: true,
