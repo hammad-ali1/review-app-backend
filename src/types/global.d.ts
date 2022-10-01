@@ -54,5 +54,15 @@ declare global {
       businessName: string;
       isAdmin: boolean;
     };
+
+    type Transaction = {
+      user: ObjectId;
+      nameOfTransaction: string;
+      dateOfTransaction: Date;
+      inflowOrOutflow: "Inflow" | "Outflow";
+      type: "Revenue" | "Other Options";
+      fromOrTo: string;
+      amount: number;
+    };
   }
 }
