@@ -4,9 +4,15 @@ import Transaction from "../models/Transaction.model";
 export const addTransaction = asyncHandler(async (req, res): Promise<any> => {
   const transaction: GlobalTypes.Transaction = req.body;
   try {
-    const result = await Transaction.create({
-      ...transaction,
-    });
+    const result = await Transaction.findOneAndUpdate(
+      //@ts-ignore
+      transaction._id,
+      transaction,
+      { upsert: true }
+    );
+    // await Transaction.create({
+    //   ...transaction,
+    // });
     return res.status(200).json(result);
   } catch (err: any) {
     console.log(err.message);
