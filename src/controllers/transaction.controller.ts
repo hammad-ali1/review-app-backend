@@ -6,7 +6,7 @@ export const addTransaction = asyncHandler(async (req, res): Promise<any> => {
   try {
     const result = await Transaction.findOneAndUpdate(
       //@ts-ignore
-      transaction._id,
+      { _id: transaction._id },
       transaction,
       { upsert: true }
     );
