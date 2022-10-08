@@ -64,5 +64,19 @@ declare global {
       fromOrTo: string;
       amount: number;
     };
+    type Asset = {
+      user: ObjectId;
+      item: string;
+      category: string;
+      condition: string;
+      location: string;
+      owner: string;
+      acquiredDate: Date;
+      price: number;
+      currentValue: number;
+      manufacturer: string;
+      series: string;
+      inurance: "yes" | "no";
+    };
   }
 }

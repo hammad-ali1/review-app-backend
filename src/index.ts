@@ -9,6 +9,7 @@ import departmentRouter from "./router/department.routes";
 import userRouter from "./router/user.routes";
 import accountancyUserRouter from "./router/accountancyUser.routes";
 import transactionRouter from "./router/transaction.routes";
+import assetRouter from "./router/asset.routes";
 //Middlewares
 import { attachUserToResponse } from "./middlewares/auth.middleware";
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/departments", departmentRouter);
 app.use("/api/users", userRouter);
 app.use("/api/accountancy/users", accountancyUserRouter);
 app.use("/api/accountancy/transactions", transactionRouter);
+app.use("/api/accountancy/assets", assetRouter);
 
 app.get("/", (req, res) => {
   res.send("Hammad's server");
