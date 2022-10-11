@@ -14,6 +14,8 @@ export const addUser = asyncHandler(async (req, res): Promise<any> => {
     });
     if (userExists)
       return res.status(400).json({ message: "user already in use" });
+    //@ts-ignore
+    delete user._id;
     const newUser = await AccountancyUser.create({
       ...user,
     });
