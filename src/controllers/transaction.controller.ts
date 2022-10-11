@@ -4,15 +4,24 @@ import Transaction from "../models/Transaction.model";
 export const addTransaction = asyncHandler(async (req, res): Promise<any> => {
   const transaction: GlobalTypes.Transaction = req.body;
   try {
-    const result = await Transaction.findOneAndUpdate(
+    let result;
+    //@ts-ignore
+    if (transaction._id) {
+      result = await Transaction.findOneAndUpdate(
+        //@ts-ignore
+        { _id: transaction._id },
+        transaction,
+        { upsert: true }
+      );
+    } else {
       //@ts-ignore
-      { _id: transaction._id },
-      transaction,
-      { upsert: true }
-    );
+      delete transaction._id;
+      result = await Transaction.create({ ...transaction });
+    }
     // await Transaction.create({
     //   ...transaction,
     // });
+
     return res.status(200).json(result);
   } catch (err: any) {
     console.log(err.message);

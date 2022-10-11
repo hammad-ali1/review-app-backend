@@ -3,14 +3,22 @@ import Asset from "../models/Asset.model";
 
 export const addAsset = asyncHandler(async (req, res): Promise<any> => {
   const asset: GlobalTypes.Transaction = req.body;
+  let result;
+  console.log(asset);
   try {
-    const result = await Asset.findOneAndUpdate(
+    //@ts-ignore
+    if (asset._id) {
+      result = await Asset.findOneAndUpdate(
+        //@ts-ignore
+        { _id: asset._id },
+        asset,
+        { upsert: true }
+      );
+    } else {
       //@ts-ignore
-      { _id: asset._id },
-      asset,
-      { upsert: true }
-    );
-
+      delete asset._id;
+      result = await Asset.create({ ...asset });
+    }
     return res.status(200).json(result);
   } catch (err: any) {
     console.log(err.message);
