@@ -64,6 +64,7 @@ export const deleteTransaction = asyncHandler(
 export const getTransactionsSummary = asyncHandler(
   async (req, res): Promise<any> => {
     const { user } = req.params;
+
     try {
       const cashFlowSummary = await Transaction.aggregate([
         {
@@ -89,7 +90,7 @@ export const getTransactionsSummary = asyncHandler(
       const cashFlowDetail = await Transaction.aggregate([
         {
           $match: {
-            user: new mongoose.Types.ObjectId("6337fcde1e2798cc6b20688b"),
+            user: new mongoose.Types.ObjectId(user),
           },
         },
         {
@@ -117,7 +118,7 @@ export const getTransactionsSummary = asyncHandler(
       const profitDetail = await Transaction.aggregate([
         {
           $match: {
-            user: new mongoose.Types.ObjectId("6337fcde1e2798cc6b20688b"),
+            user: new mongoose.Types.ObjectId(user),
           },
         },
         {
