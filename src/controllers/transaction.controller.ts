@@ -92,16 +92,15 @@ export const getTransactionsSummary = asyncHandler(
             user: new mongoose.Types.ObjectId("6337fcde1e2798cc6b20688b"),
           },
         },
-
-        {
-          $sort: {
-            dateOfTransaction: 1,
-          },
-        },
         {
           $group: {
             _id: "$dateOfTransaction",
             result: { $push: { type: "$inflowOrOutflow", amount: "$amount" } },
+          },
+        },
+        {
+          $sort: {
+            _id: 1,
           },
         },
       ]);
@@ -115,11 +114,92 @@ export const getTransactionsSummary = asyncHandler(
           },
         },
       ]);
+      const profitDetail = await Transaction.aggregate([
+        {
+          $match: {
+            user: new mongoose.Types.ObjectId("6337fcde1e2798cc6b20688b"),
+          },
+        },
+        {
+          $group: {
+            _id: "$user",
+            result: {
+              $push: {
+                type: "$inflowOrOutflow",
+                amount: "$amount",
+                date: "$dateOfTransaction",
+              },
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "assets",
+            localField: "_id",
+            foreignField: "user",
+            as: "assets",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            result: 1,
+            "assets.type": "Asset",
+            "assets.acquiredDate": 1,
+            "assets.price": 1,
+          },
+        },
+        {
+          $project: {
+            result: 1,
+            assets: {
+              $map: {
+                input: "$assets",
+                as: "sec",
+                in: {
+                  date: "$$sec.acquiredDate",
+                  amount: "$$sec.price",
+                  type: "$$sec.type",
+                },
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            item: { $concatArrays: ["$result", "$assets"] },
+          },
+        },
+        {
+          $unwind: {
+            path: "$item",
+          },
+        },
+        {
+          $project: {
+            type: "$item.type",
+            amount: "$item.amount",
+            date: "$item.date",
+          },
+        },
+        {
+          $group: {
+            _id: "$date",
+            result: { $push: { type: "$type", amount: "$amount" } },
+          },
+        },
+        {
+          $sort: {
+            _id: 1,
+          },
+        },
+      ]);
       const result = {
         cashFlowDetail,
         cashFlowSummary,
         assetDetail,
         assetSummary,
+        profitDetail,
       };
       return res.status(200).json(result);
     } catch (err: any) {
