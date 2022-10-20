@@ -83,6 +83,46 @@ export const deleteUser = asyncHandler(async (req, res): Promise<any> => {
   }
 });
 
+export const sendResetEmail = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { user } = req.params;
+    const userFound = await AccountancyUser.findOne({ userName: user });
+    if (userFound) {
+      var authCode = Math.floor(1000 + Math.random() * 9000);
+      const html = `<p> your auth code is ${authCode}</p>`;
+      if (userFound.email)
+        sendMessage(userFound.email, "Two factor auth", html);
+      userFound.authCode = authCode.toString();
+      return res.status(200).json({
+        user: userFound,
+      });
+    } else {
+      return res.status(404).json({ message: "user id not found" });
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({ message: "error occured while sending email" });
+  }
+});
+
+export const updatePassword = asyncHandler(async (req, res): Promise<any> => {
+  try {
+    const { userName, password } = req.body;
+    const userFound = await AccountancyUser.updateOne(
+      { userName },
+      { password }
+    );
+
+    if (userFound) {
+      return res.status(200).json({ message: "success" });
+    } else {
+      return res.status(404).json({ message: "not found" });
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    res.status(400).json({ message: "error occured " });
+  }
+});
 // export const getUser = asyncHandler(async (req, res): Promise<any> => {
 //   try {
 //     const { token } = req.query;
