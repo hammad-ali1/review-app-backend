@@ -31,11 +31,6 @@ export const updateUser = asyncHandler(async (req, res): Promise<any> => {
   if (!user.userName)
     return res.status(400).json({ msg: "provide all user fields" });
   try {
-    const userExists = await AccountancyUser.findOne({
-      userName: user.userName,
-    });
-    if (!userExists)
-      return res.status(400).json({ message: "user does not exists" });
     //@ts-ignore
     const newUser = await AccountancyUser.updateOne({ _id: user._id }, user);
     return res.status(200).json({ user: newUser });
