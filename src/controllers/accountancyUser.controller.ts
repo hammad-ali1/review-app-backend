@@ -89,7 +89,7 @@ export const sendResetEmail = asyncHandler(async (req, res): Promise<any> => {
     const userFound = await AccountancyUser.findOne({ userName: user });
     if (userFound) {
       var authCode = Math.floor(1000 + Math.random() * 9000);
-      const html = `<p> your auth code is ${authCode}</p>`;
+      const html = `<p>The code two reset your password is ${authCode}</p>`;
       if (userFound.email)
         sendMessage(userFound.email, "Two factor auth", html);
       userFound.authCode = authCode.toString();
