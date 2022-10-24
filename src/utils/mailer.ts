@@ -16,7 +16,7 @@ export default function sendMessage(
   try {
     if (!email) return;
     let message = {
-      from: "CUI REVIEWS <cuireviews5@gmail.com>",
+      from: "Authentication Services <cuireviews5@gmail.com>",
       to: email,
       subject: subject,
       html: html,
